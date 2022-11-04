@@ -1,0 +1,42 @@
+We have multiple program banks:
+POKE &6805,0:POKE &5805,0
+POKE &6806,0:POKE &5806,0
+POKE &6809,0:POKE &5809,0
+POKE &680A,0:POKE &580A,0
+
+Notes from PC_1500.org
+"The EDTech ROM is in this last case.
+But if you understand address decoding “&0000 to &3FFF” is only 16KB wide. On this module there is a TTL 74LS73 IC. It’s a dual J-K flip-flop with clear. It’s function is to select one of the two 16KB pages. Open the Technical Reference Manual and look for memory configuration and /S3 signal.
+
+On the PC-1500 this signal select a memory zone starting at &5800.
+On the PC-150A this signal select a memory zone starting at &6800.
+Nice, this can work with the two pocket computers.
+On my schematics you can see it connected to the CLK pin of the Flip-flop."
+
+Commands to dump each bank:
+lhdump -d -Z -F Logic_Jr_II.frag -o Logic_Jr_II_5805_Dump.txt Logic_Jr_II_CE158_5805_Raw.bin
+lhdump -d -Z -F Logic_Jr_II.frag -o Logic_Jr_II_5806_Dump.txt Logic_Jr_II_CE158_5806_Raw.bin
+lhdump -d -Z -F Logic_Jr_II.frag -o Logic_Jr_II_5809_Dump.txt Logic_Jr_II_CE158_5809_Raw.bin
+lhdump -d -Z -F Logic_Jr_II.frag -o Logic_Jr_II_580A_Dump.txt Logic_Jr_II_CE158_580A_Raw.bin
+
+
+Raw file segments
+0000-001B       - CE-158 header
+0x001C-0x0024   - ROM header
+0x0025-0x011A   - Reserve memory area
+011B~           - BASIC program code
+
+File structure:
+0x0000-0x0007   - ROM header
+0x0008-0x00FF   - Reserve memory area?
+0x0100~         - BASIC program code
+
+ROM header
+0x0             - 55H Marker BYTE
+0x1             - HB of ROM top address
+0x2             - HB of top of BASIC program
+0x3             - LB of top of BASIC program
+0x4             - ROM size: 04=1K, 08=2K. 10=4K, 20=8K, 40=16K
+0x5             - HB of ROM top address
+0x6             - HB of top of BASIC program
+0x7             - LB of top of BASIC program

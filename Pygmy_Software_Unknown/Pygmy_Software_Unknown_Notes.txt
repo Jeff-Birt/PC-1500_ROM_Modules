@@ -1,0 +1,20 @@
+Dumped as a 16K cart from 0x0000-0x3FFF but is was only an 8K cart.
+Stripped off CE-158 header and first 8K of 0xFF to get to only cart data.
+
+File structure:
+0x0000-0x0007   - ROM header
+0x0008-0x00FF   - Reserve memory area?
+0x00C5-0x1F45   - BASIC program code
+0x1F46-0x1FFF   - Gibberish?
+
+ROM header
+0x0             - 55H Marker BYTE
+0x1             - HB of ROM top address
+0x2             - HB of top of BASIC program
+0x3             - LB of top of BASIC program
+0x4             - ROM size: 04=1K, 08=2K. 10=4K, 20=8K, 40=16K
+0x5             - HB of ROM top address
+0x6             - HB of top of BASIC program
+0x7             - LB of top of BASIC program
+
+lhdump -d -F Pygmy.frag -o Pygmy_Software_Unknown_Dump.txt Pygmy_Software_Unknown_8K_RAW.bin
