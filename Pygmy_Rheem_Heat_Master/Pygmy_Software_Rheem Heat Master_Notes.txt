@@ -13,8 +13,24 @@ ROM header
 0x2             - HB of top of BASIC program
 0x3             - LB of top of BASIC program
 0x4             - ROM size: 04=1K, 08=2K. 10=4K, 20=8K, 40=16K
-0x5             - HB of ROM top address
-0x6             - HB of top of BASIC program
-0x7             - LB of top of BASIC program
+0x5             - undefined
+0x6             - undefined
+0x7             - 0x00 Prevent LIST, 0x00 allow list
 
 lhdump -d -F Pygmy.frag -o Pygmy_Software_Rheem_Heat_Master_Dump.txt Pygmy_Software_Rheem_Heat_Master_8K_RAW.bin
+
+
+Usage note from Bill, WD9EQD
+
+I was able to get the Rheem program loaded into the Android go1500 emulator. At first I was running the program at it's maximum emulation speed, but I found that must be some sort of timing issue when using the emulated print/plotter. It just wasn't printing everything correctly. But when I slowed it down to 2X emulation, it ran fine.
+
+I spent a little time figuring what the input should be. To run it,
+
+Start with DEF S This will initialize the variables
+Then do DEF D This will ask for some design parameters:
+Winter Design Temp ?
+Winter Inside Temp ?
+Summer Design Temp ?
+Summer Inside Temp ?
+
+Then finally do DEF H This is the main program which will ask for Room Areas, walls, windows, doors, etc.

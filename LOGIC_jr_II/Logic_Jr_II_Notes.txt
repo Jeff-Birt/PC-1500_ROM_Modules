@@ -37,6 +37,6 @@ ROM header
 0x2             - HB of top of BASIC program
 0x3             - LB of top of BASIC program
 0x4             - ROM size: 04=1K, 08=2K. 10=4K, 20=8K, 40=16K
-0x5             - HB of ROM top address
-0x6             - HB of top of BASIC program
-0x7             - LB of top of BASIC program
+0x5             - undefined
+0x6             - undefined
+0x7             - 0x00 Prevent LIST, 0x00 allow list

@@ -1,0 +1,8 @@
+Custom Quoter 
+
+Dumped from two different versions of 60P program module. Each module contained two EPROMs which were read and then combined into a single binary file and detokenized.
+
+PROG_30007_A.BIN & PROG_30007_B.BIN ->> PROG_30007_AB.BIN ->> PROG_30007_AB.TXT
+
+PROG_30007_AB_DAT.BIN -- Machine code or data, used by BASIC program
+PROG_30007_AB_RES.BIN -- Binary of Reserve memory with no header

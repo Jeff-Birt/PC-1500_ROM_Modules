@@ -1,0 +1,36 @@
+0000   B5 21                      LDI  A,$21        ; 
+0002   AE 76 4E                   STA  ($764E)      ; Display RAM, Unused by PC-1500 or CE-150
+0005   B5 43                      LDI  A,$43        ; 
+0007   AE 76 4F                   STA  ($764F)      ; Display RAM, Unused by PC-1500 or CE-150
+000A   B5 00                      LDI  A,$00        ; 
+000C   AE 79 FF                   STA  ($79FF)      ; LOCK mode: 00=LOCK, FF=UNLOCK
+
+000F   B5 30                      LDI  A,$30        ; Set end of BASIC to $3000 (12K)
+0011   AE 78 67                   STA  ($7867)      ; BASPRG_END_H - End of Basic program in ROM (H)
+0014   B5 00                      LDI  A,$00        ; 
+0016   AE 78 68                   STA  ($7868)      ; BASPRG_END_L - End of Basic program in ROM (L)
+
+0019   B5 48                      LDI  A,$48        ; Set end of RAM to $4800
+001B   AE 78 64                   STA  ($7864)      ; RAM_END_H - End of RAM pointer (H)
+
+001E   B5 00                      LDI  A,$00        ; Set BASIC start to $00C5
+0020   AE 78 65                   STA  ($7865)      ; BASPRG_ST_H - Start of Basic program in ROM (H)
+0023   B5 C5                      LDI  A,$C5        ; 
+0025   AE 78 66                   STA  ($7866)      ; BASPRG_ST_L - Start of Basic program in ROM (L)
+
+0028   B5 48                      LDI  A,$48        ; Set start of variable RAM t0 $4800 (2K SRAM in module?)
+002A   AE 78 99                   STA  ($7899)      ; VAR_START_H - START OF VARIABLES in main memory (H)
+002D   B5 00                      LDI  A,$00        ; 
+002F   AE 78 9A                   STA  ($789A)      ; VAR_START_L - START OF VARIABLES in main memory (L)
+0032   9A                         RTN               ; Done with set up
+
+0033   00                         SBC  XL           ; Filler byte
+
+0034   48 38                      LDI  XH,$38       ; RESMEM_ST - Start of RAM w/CE-155, 8K RAM module
+0036   4A 00                      LDI  XL,$00       ; 
+0038   B5 00                      LDI  A,$00        ; Zeros out section of RAM
+003A   0E                         STA  (X)          ; 
+003B   44                         INC  X            ; 
+003C   4E 43                      CPI  XL,$43       ; 
+003E   99 06                      BZR  $003A        ;
+0040   9A                         RTN               ;

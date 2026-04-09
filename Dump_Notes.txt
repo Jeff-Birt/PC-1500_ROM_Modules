@@ -1,0 +1,77 @@
+Dumping PC-1500 ROM 40P cart, single bank (plugs into 40P slot on bottom)
+
+0       1    2   3   4     5   6   7   8   9  10   11   12    13   14   15   16   17   18   19   20   21   22   23   24   25   26
+0x01   "@"  "C" "O" "M"   "S" "T" "A" "T" "0" 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x40 0x00 0x?? 0x??
+01 	42  43   4F  4D   53  54  41  54  30    00   00   00   00   00   00   00   00   00   00   00   00   00   40   00   FF   FF
+
+Bytes
+0		0x01 			Begin marker
+1-4		"@COM" 			CE-158 type, @COM=BASIC, ACOM=RESERVE, BCOM=ML, HCOM=PRINT#
+5-20		"Filename" 		Padded with zeros (16 bytes)
+21-22		Start Address		HB LB
+23-24		Length			HB LB, length code excludes length of header
+25-26					Don't care
+
+Raw file segments
+0x0000-0x001A   - CE-158 header		(bytes 0x26)
+0x001B-0x0022   - ROM header		(bytes 0x07)
+0x0023-0x00DF   - Reserve memory area	(bytes 0xBC) 
+0x00E0~         - BASIC program code	
+
+Program structure:
+0x0000-0x0007   - ROM header		(bytes 0x07)
+0x0008-0x00C4   - Reserve memory area	(bytes 0xBC)
+0x00C5~         - BASIC program code
+
+ROM header
+0x0             - 55H Marker BYTE
+0x1             - HB of ROM top address
+0x2             - HB of top of BASIC program
+0x3             - LB of top of BASIC program
+0x4             - ROM size: 04=1K, 08=2K. 10=4K, 20=8K, 40=16K
+0x5             - undefined
+0x6             - undefined
+0x7             - 0xFF Prevent LIST, 0x00 allow list
+
+To convert dumped ROM to BASIC source -- 
+Use hex editor to remove CSAVE header, i.e. bytes &00~&1A. Use following command with frag file. lhTools does not seem to handle things if CSAVE header is present.
+lhdump -d -F CE-502B.frag -o CE-502B_B2.txt CE-502B_NH.bin
+
+To create CE-158 loadable Reserve memory file --
+Use hex editor to remove header, i.e. bytes &00~&1A. In the resulting file remove all bytes $C5 to end of file. Save this as file.tmp. Use hdr158.ps1 script to add CE-158 header: ./hdr158.ps1 file.tmp -rsv
+
+To create CE-158 loadable program file --
+Use hex editor to remove all bytes from original dump between &0000~&00DF. Save file as file.tmp. Use hdr158.ps1 script to add CE-158 header: ./hdr158.ps1 file.tmp -bas
+
+
+
+Dumping PC-1500 ROM 60P cart for ML programs (plugs into 60P connector on left side)
+
+Address range: &8000-&9FFF PV+PU, /PV+PU, PV+/PU, /PV+/PU
+    and banks: &A000-&BFFF PV+PU, /PV+PU, PV+/PU, /PV+/PU
+
+You will need a PC-1500 with at least an 8K RAM expansion.
+First relocate start of BASIC with NEW &2000, this will erase programs, and reserve lowest 8K for dump.
+
+Use CE-158(X) to load BASIC program 60PDUMP.ASC
+Power off computer and CE-158(X), remove CE-158(X)
+Plug-in ROM cart, power on.
+Run BASIC program. 
+Answer 1-2 to choose address range.
+Answer 1-4 to choose bank to dump:
+ SPV&SPU=1 SPV&RPU=2 RPV&SPU=3 RPV&RPU=4 address space?
+After making selection the ML code is modified and that area copied to &0000-$1FFF.
+Power off computer, remove ROM. Install CE-158(X). Power on.
+Use CSAVEm"file.bin";&0000,&1FFF
+Repeat to dump all ROM areas.
+
+Use a hex editor to look at each file to find which one(s) contain the code.
+
+
+
+Dumping BASIC programs from 60P cart
+Easiest to pull EPROMs and read with Minipro etc. Some may be split into two 8K EPROMs to bin file needs to be stitched together. Look for file with $55 as first byte. This is the start of the program which we will call File A. The other 8K EPROM is File B. Concatenate A+B.
+
+Look at ROM header to find out if Reserve Memory exists and where BASIC program start. Use hex editor to split out the separate section of the file.
+
+Example.
