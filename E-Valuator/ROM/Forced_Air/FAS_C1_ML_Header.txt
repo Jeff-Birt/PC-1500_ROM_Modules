@@ -10,7 +10,7 @@
 0014   B5 00                      LDI  A,$00        ; 
 0016   AE 78 68                   STA  ($7868)      ; BASPRG_END_L - End of Basic program in ROM (L)
 
-0019   B5 48                      LDI  A,$48        ; Set end of RAM to $4800
+0019   B5 48                      LDI  A,$48        ; Set end of (program?) RAM to $4800
 001B   AE 78 64                   STA  ($7864)      ; RAM_END_H - End of RAM pointer (H)
 
 001E   B5 00                      LDI  A,$00        ; Set BASIC start to $00C5
@@ -18,7 +18,7 @@
 0023   B5 C5                      LDI  A,$C5        ; 
 0025   AE 78 66                   STA  ($7866)      ; BASPRG_ST_L - Start of Basic program in ROM (L)
 
-0028   B5 48                      LDI  A,$48        ; Set start of variable RAM t0 $4800 (2K SRAM in module?)
+0028   B5 48                      LDI  A,$48        ; Set start of variable RAM to $4800 (2K SRAM in module?)
 002A   AE 78 99                   STA  ($7899)      ; VAR_START_H - START OF VARIABLES in main memory (H)
 002D   B5 00                      LDI  A,$00        ; 
 002F   AE 78 9A                   STA  ($789A)      ; VAR_START_L - START OF VARIABLES in main memory (L)
